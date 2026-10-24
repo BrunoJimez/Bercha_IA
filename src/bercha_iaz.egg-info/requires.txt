@@ -1,0 +1,11 @@
+
+[dev]
+pytest>=8.0
+pyinstaller>=6.0
+
+[enhanced]
+psutil>=5.9
+py-cpuinfo>=9.0
+
+[pdf]
+reportlab>=4.0

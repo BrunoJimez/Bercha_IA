@@ -1,0 +1,164 @@
+Metadata-Version: 2.4
+Name: bercha-livrenexo
+Version: 0.1.0
+Summary: Análise livre de hardware, modelos de IA e configurações locais
+Author: Bruno Jimez
+License: GPL-3.0-or-later
+Project-URL: Homepage, https://github.com/BrunoJimez/bercha-livrenexo
+Project-URL: Repository, https://github.com/BrunoJimez/bercha-livrenexo
+Project-URL: Issues, https://github.com/BrunoJimez/bercha-livrenexo/issues
+Keywords: artificial-intelligence,hardware,llm,huggingface,local-ai,free-software
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Win32 (MS Windows)
+Classifier: Environment :: X11 Applications
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: pdf
+Requires-Dist: reportlab>=4.0; extra == "pdf"
+Provides-Extra: enhanced
+Requires-Dist: psutil>=5.9; extra == "enhanced"
+Requires-Dist: py-cpuinfo>=9.0; extra == "enhanced"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+Requires-Dist: pyinstaller>=6.0; extra == "dev"
+Dynamic: license-file
+
+# Bercha LivreNexo
+
+[![CI](https://github.com/BrunoJimez/bercha-livrenexo/actions/workflows/ci.yml/badge.svg)](https://github.com/BrunoJimez/bercha-livrenexo/actions/workflows/ci.yml)
+[![Licença GPLv3+](https://img.shields.io/badge/licen%C3%A7a-GPLv3%2B-2b6cb0.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-3776ab.svg)](https://www.python.org/)
+[![Sem telemetria](https://img.shields.io/badge/telemetria-n%C3%A3o-25d5a0.svg)](#privacidade)
+
+> O nexo livre entre seu hardware e a inteligência artificial local.
+
+O **Bercha LivreNexo** inventaria o computador, mantém um catálogo vivo de
+modelos de IA, explica quais podem ser executados localmente e propõe uma
+configuração completa de hardware para o modelo escolhido. O projeto é gratuito,
+sem anúncios, sem telemetria e distribuído sob a GPL-3.0-or-later.
+
+## Destaques
+
+- interface gráfica em português para quem não utiliza terminal;
+- CLI estável para automação e usuários técnicos;
+- análise de CPU, caches, placa-mãe, BIOS, RAM, SPD, GPU, VRAM e discos;
+- suporte a Windows, Linux e macOS, com refinamento NVIDIA via `nvidia-smi`;
+- catálogo SQLite offline e sincronização paginada com Hugging Face;
+- descoberta de runtimes e projetos relevantes no GitHub;
+- ranking BerchaScore, sempre do modelo mais avançado ao menos avançado;
+- parecer explicável: GPU, CPU/offload, limítrofe, incompatível ou nuvem/API;
+- montador com GPU, CPU, placa-mãe, RAM, SSD, fonte, cooler, gabinete e nobreak;
+- links de pesquisa em lojas sem afiliação;
+- relatórios HTML, TXT, JSON e PDF;
+- números de série ocultados por padrão.
+
+## Instalação rápida
+
+### Windows
+
+Baixe o executável mais recente em [Releases](https://github.com/BrunoJimez/bercha-livrenexo/releases).
+Ele é portátil e não exige uma instalação do Python.
+
+### Código-fonte
+
+Requer Python 3.10 ou posterior. No Linux, o pacote `python3-tk` pode ser necessário.
+
+```bash
+git clone https://github.com/BrunoJimez/bercha-livrenexo.git
+cd bercha-livrenexo
+python -m venv .venv
+```
+
+Windows PowerShell:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+pip install -e ".[pdf,enhanced]"
+bercha-livrenexo-gui
+```
+
+Linux/macOS:
+
+```bash
+source .venv/bin/activate
+pip install -e ".[pdf,enhanced]"
+bercha-livrenexo-gui
+```
+
+## CLI
+
+```bash
+bercha-livrenexo scan
+bercha-livrenexo recommend --limit 20 --include-incompatible
+bercha-livrenexo sync --limit 500
+bercha-livrenexo sync --all
+bercha-livrenexo build Qwen/Qwen3-8B
+bercha-livrenexo report relatorio.html --model-id Qwen/Qwen3-8B
+bercha-livrenexo bench
+```
+
+Tokens opcionais ampliam os limites das fontes públicas:
+
+```powershell
+$env:HF_TOKEN="..."
+$env:GITHUB_TOKEN="..."
+bercha-livrenexo sync --all
+```
+
+Os tokens não são persistidos nem incluídos nos relatórios.
+
+## Como as recomendações funcionam
+
+O LivreNexo combina inventário local, parâmetros do modelo, precisão, RAM, VRAM,
+armazenamento, tarefa, runtime e licença. O parecer separa qualidade do modelo e
+compatibilidade do computador: um modelo avançado permanece no ranking mesmo
+quando o PC atual não consegue executá-lo.
+
+As estimativas de memória e velocidade são deliberadamente identificadas como
+heurísticas. Consulte a [metodologia](docs/METODOLOGIA.md) para fórmulas, critérios
+e limitações, e a [arquitetura](docs/ARQUITETURA.md) para a organização interna.
+
+## Cobertura e limites
+
+“Todos os modelos” significa todos os registros públicos visíveis pela API durante
+a varredura completa. Modelos privados, removidos ou serviços fechados não podem
+ser indexados como executáveis locais. Claude, GPT e serviços semelhantes aparecem
+como nuvem/API; o LivreNexo não simula uma distribuição local inexistente.
+
+Fonte, cooler, gabinete e compatibilidade física não possuem telemetria universal.
+As listas de compra são configurações-alvo e devem ser validadas antes da aquisição.
+
+## Privacidade
+
+- o inventário é processado localmente;
+- nenhuma telemetria é coletada;
+- somente a atualização do catálogo acessa Hugging Face e GitHub;
+- seriais são mascarados por padrão;
+- não existem anúncios, links afiliados ou chaves embutidas.
+
+## Desenvolvimento
+
+```bash
+pip install -e ".[dev,pdf,enhanced]"
+pytest -q
+```
+
+Para gerar o executável Windows:
+
+```powershell
+.\scripts\build_windows.ps1
+```
+
+O resultado é gravado em `dist\Bercha-LivreNexo.exe`.
+
+Consulte [CONTRIBUTING.md](CONTRIBUTING.md), [SECURITY.md](SECURITY.md) e o
+[Código de Conduta](CODE_OF_CONDUCT.md) antes de contribuir.
+
+## Licença
+
+Copyright © 2026 Bruno Jimez. Distribuído sob a
+[GNU General Public License v3 ou posterior](LICENSE).
+

@@ -1,0 +1,3 @@
+[console_scripts]
+bercha-livrenexo = bercha_livrenexo.cli:main
+bercha-livrenexo-gui = bercha_livrenexo.gui:main

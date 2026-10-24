@@ -1,0 +1,3 @@
+[console_scripts]
+bercha-iaz = bercha_iaz.cli:main
+bercha-iaz-gui = bercha_iaz.gui:main

@@ -1,0 +1,122 @@
+Metadata-Version: 2.4
+Name: bercha-iaz
+Version: 0.1.0
+Summary: Analisador universal de hardware e recomendador transparente de modelos de IA
+Author: Projeto Bercha IA
+License: GPL-3.0-or-later
+Keywords: artificial-intelligence,hardware,llm,huggingface,cpu-z
+Classifier: Development Status :: 3 - Alpha
+Classifier: Environment :: Win32 (MS Windows)
+Classifier: Environment :: X11 Applications
+Classifier: License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Provides-Extra: pdf
+Requires-Dist: reportlab>=4.0; extra == "pdf"
+Provides-Extra: enhanced
+Requires-Dist: psutil>=5.9; extra == "enhanced"
+Requires-Dist: py-cpuinfo>=9.0; extra == "enhanced"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+Requires-Dist: pyinstaller>=6.0; extra == "dev"
+Dynamic: license-file
+
+# Bercha IA-Z
+
+Um “CPU-Z para IA”: inventaria profundamente o computador, mantém um catálogo vivo
+de modelos, recomenda do mais avançado ao menos avançado, explica gargalos e monta
+uma configuração de PC completa para o modelo escolhido.
+
+O projeto é gratuito, sem anúncios, sem telemetria e licenciado sob GPL-3.0-or-later.
+
+## O que já funciona
+
+- interface gráfica em português pensada para uso sem terminal;
+- CLI para automação e usuários técnicos;
+- abas CPU, Caches, Placa-mãe, Memória, SPD, Gráficos, Discos, Bench e Sobre, além
+  de Modelos de IA, Montar PC, Fontes online e Relatórios;
+- coleta Windows (CIM/PowerShell), Linux (`/proc`, `sysfs`) e macOS
+  (`system_profiler`), com refinamento NVIDIA via `nvidia-smi`;
+- catálogo offline curado e SQLite escalável;
+- sincronização rápida ou completa da API pública do Hugging Face;
+- descoberta de runtimes e projetos no GitHub, com degradação segura quando a API
+  limita consultas anônimas;
+- parecer de execução em GPU, CPU/offload, incompatibilidade ou nuvem/API;
+- configuração-alvo com GPU, processador, placa-mãe, RAM, SSD, fonte, cooler,
+  gabinete, ventilação e nobreak;
+- links de busca em lojas brasileiras, sempre sem afiliação;
+- relatórios HTML, TXT e JSON sem dependências; PDF com o extra `pdf`;
+- números de série ocultos por padrão.
+
+## Executar a interface
+
+Requer Python 3.10 ou posterior. Tk já acompanha as distribuições comuns do Python.
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -e .
+bercha-iaz-gui
+```
+
+No Linux/macOS, ative com `source .venv/bin/activate`. Em algumas distribuições
+Linux, instale também o pacote do sistema `python3-tk`.
+
+## Criar o executável Windows
+
+```powershell
+.\scripts\build_windows.ps1
+```
+
+O resultado fica em `dist\Bercha-IAZ.exe` e não exige Python no computador do
+usuário final. O script instala PyInstaller e o suporte a PDF somente dentro de
+`.build-venv`.
+
+## CLI
+
+```powershell
+bercha-iaz scan
+bercha-iaz recommend --limit 20 --include-incompatible
+bercha-iaz sync --limit 500
+bercha-iaz sync --all
+bercha-iaz build Qwen/Qwen3-8B
+bercha-iaz report relatorio.html --model-id Qwen/Qwen3-8B
+bercha-iaz bench
+```
+
+Tokens opcionais aumentam os limites das fontes, mas não são obrigatórios:
+
+```powershell
+$env:HF_TOKEN="..."
+$env:GITHUB_TOKEN="..."
+bercha-iaz sync --all
+```
+
+Eles não são gravados no banco nem aparecem nos relatórios.
+
+## Limites honestos
+
+“Todos os modelos” significa todos os registros que a API pública permite enxergar
+no momento da varredura completa. Modelos privados, removidos e serviços fechados
+como Claude/GPT não podem ser baixados para o PC. Esses serviços aparecem separados
+como nuvem/API; o programa não finge que uma versão local existe.
+
+Os requisitos inferidos e as faixas de tokens/s são estimativas. Contexto, runtime,
+drivers, quantização e arquitetura mudam o consumo real. Fonte, cooler, gabinete e
+compatibilidade física não são universalmente detectáveis; a lista de compra deve
+ser validada por um integrador antes da aquisição.
+
+Leia [a metodologia](docs/METODOLOGIA.md) e [a arquitetura](docs/ARQUITETURA.md).
+
+## Desenvolvimento
+
+```powershell
+pip install -e ".[dev,pdf,enhanced]"
+pytest -q
+```
+
+Contribuições, novos conectores públicos, traduções, dados de benchmark
+reproduzíveis e melhorias de acessibilidade são bem-vindos.
+
