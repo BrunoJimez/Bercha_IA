@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+message: "Se o Bercha LivreNexo ajudar seu trabalho, cite este software."
+title: "Bercha LivreNexo"
+abstract: "Análise livre de hardware, modelos de IA e configurações locais."
+type: software
+authors:
+  - family-names: "Jimez"
+    given-names: "Bruno"
+version: 0.1.0
+date-released: 2026-08-09
+license: GPL-3.0-or-later
+repository-code: "https://github.com/BrunoJimez/bercha-livrenexo"
+url: "https://github.com/BrunoJimez/bercha-livrenexo"

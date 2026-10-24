@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bercha-livrenexo"
+version = "0.1.0"
+description = "Análise livre de hardware, modelos de IA e configurações locais"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "GPL-3.0-or-later"}
+authors = [{name = "Bruno Jimez"}]
+keywords = ["artificial-intelligence", "hardware", "llm", "huggingface", "local-ai", "free-software"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Win32 (MS Windows)",
+  "Environment :: X11 Applications",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+  "Programming Language :: Python :: 3",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/BrunoJimez/bercha-livrenexo"
+Repository = "https://github.com/BrunoJimez/bercha-livrenexo"
+Issues = "https://github.com/BrunoJimez/bercha-livrenexo/issues"
+
+[project.optional-dependencies]
+pdf = ["reportlab>=4.0"]
+enhanced = ["psutil>=5.9", "py-cpuinfo>=9.0"]
+dev = ["pytest>=8.0", "pyinstaller>=6.0"]
+
+[project.scripts]
+bercha-livrenexo = "bercha_livrenexo.cli:main"
+bercha-livrenexo-gui = "bercha_livrenexo.gui:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
